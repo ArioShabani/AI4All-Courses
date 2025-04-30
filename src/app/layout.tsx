@@ -6,16 +6,7 @@ import './globals.css';
 import { cn } from '@/lib/utils';
 import { Toaster } from '@/components/ui/toaster'; // Import Toaster
 
-// Initialize the font variables
-const geistSans = GeistSans({
-  variable: '--font-geist-sans',
-  subsets: ['latin'], // Add subsets if needed, though Geist often handles this automatically
-});
-
-const geistMono = GeistMono({
-  variable: '--font-geist-mono',
-  subsets: ['latin'], // Add subsets if needed
-});
+// Font variables are applied directly to the html tag below
 
 export const metadata: Metadata = {
   title: 'AI4All Training Hub',
@@ -28,12 +19,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="h-full">
+    // Apply font variables directly to the html tag for global availability
+    <html lang="en" className={cn("h-full", GeistSans.variable, GeistMono.variable)}>
       <body
         className={cn(
           'min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 font-sans antialiased dark:from-gray-900 dark:to-indigo-950', // Applied gradient here
-          geistSans.variable, // Use the font variable class
-          geistMono.variable  // Use the font variable class
+          // Font variables are now on the html tag, font-sans will pick up --font-geist-sans
         )}
       >
         {children}
