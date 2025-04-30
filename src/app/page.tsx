@@ -1,7 +1,6 @@
-
 'use client'; // Required for Framer Motion and client-side interactions
 
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import { Separator } from "@/components/ui/separator";
 import { motion, AnimatePresence } from "framer-motion"; // Import motion and AnimatePresence
 import { CourseOverviewCard } from '@/components/course-overview-card';
@@ -36,49 +35,12 @@ const itemVariants = {
    }
 };
 
-export default function Home() {
-
-  React.useEffect(() => {
-    setIsClient(true); // Set client state after mount
-
-    // Fetch PDF content
-    const fetchPdfContent = async () => {
-      setIsLoading(true);
-      setError(null);
-      try {
-        // Use the standardized filename 'course-content.pdf'
-        const response = await fetch('/api/pdf?filename=course-content.pdf');
-        if (!response.ok) {
-          const errorData = await response.json().catch(() => ({ error: `HTTP error! status: ${response.status}` }));
-          throw new Error(errorData.error || `Failed to fetch PDF: ${response.statusText}`);
-        }
-        const data = await response.json();
-        setCourseContent(data.text);
-      } catch (err: any) {
-        console.error("Error fetching PDF content:", err);
-        setError(err.message || 'Failed to load course content from PDF. Please ensure the file named `course-content.pdf` exists in the `public/pdfs` directory.');
-        // Fallback or alternative content could be set here if needed
-        setCourseContent(null); // Ensure no stale content is shown on error
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchPdfContent();
-  }, []);
-
-  // Render skeleton or loader server-side/during fetch, then the full UI client-side
-  if (!isClient || isLoading) {
-    return (
-      <div className="container mx-auto max-w-5xl p-4 md:p-8 space-y-10">
-         <Skeleton className="h-24 w-full" />
-         <Skeleton className="h-32 w-full" />
-         <Skeleton className="h-64 w-full" />
-         <Skeleton className="h-48 w-full" />
-         <Skeleton className="h-48 w-full" />
-      </div>
-    ); // Or a loading spinner
-  }
+export default function Home() {  
+  const [index, setIndex] = useState(0);
+  const [isClient, setIsClient] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null);
+  const [courseContent, setCourseContent] = useState<string | null>(null);
 
   return (
     <AnimatePresence>
@@ -100,7 +62,7 @@ export default function Home() {
         </motion.div>
 
 
-        {/* Course Overview Section - Now uses PDF content */}
+        {/* Course Overview Section */}
         <CourseOverviewCard />
 
 
