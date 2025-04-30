@@ -1,3 +1,4 @@
+
 'use client'; // Required for Framer Motion and client-side interactions
 
 import React from 'react';
@@ -8,8 +9,8 @@ import { CourseOverviewCard } from '@/components/course-overview-card';
 import { ModuleCard } from '@/components/module-card';
 import { ResourceCard } from '@/components/resource-card';
 import { DashboardLinkCard } from '@/components/dashboard-link-card';
-import { modules, resources, futureDashboards } from '@/lib/course-data';
-import { BrainCircuit } from 'lucide-react'; // Or another relevant icon
+import { modules, resources, futureDashboards, furtherLearningResources } from '@/lib/course-data'; // Import furtherLearningResources
+import { BrainCircuit, BookOpenCheck } from 'lucide-react'; // Import BookOpenCheck icon
 
 
 // Animation variants
@@ -47,6 +48,12 @@ export default function Home() {
   if (!isClient) {
     return null; // Or a loading spinner
   }
+
+   // Parse furtherLearningResources
+   const furtherLearningParagraphs = furtherLearningResources.trim().split('\n\n');
+   const furtherLearningTitle = furtherLearningParagraphs.length > 0 ? furtherLearningParagraphs[0].replace(/\*\*/g, '') : "Further Learning";
+   const furtherLearningListItems = furtherLearningParagraphs.slice(1).join('\n').split('\n').filter(line => line.startsWith('- '));
+
 
   return (
     <AnimatePresence>
@@ -119,6 +126,7 @@ export default function Home() {
 
         {/* Future Dashboards Section */}
          {futureDashboards.length > 0 && (
+            <>
              <motion.section className="mb-10 md:mb-16" variants={itemVariants}>
                <h2 className="text-3xl font-semibold text-primary mb-8 text-center">Explore More AI Tools</h2>
                <motion.div
@@ -130,7 +138,33 @@ export default function Home() {
                  ))}
                </motion.div>
              </motion.section>
+              <motion.div variants={itemVariants}>
+                <Separator className="mb-10 md:mb-16 bg-border/60" />
+              </motion.div>
+            </>
          )}
+
+         {/* Further Learning Section */}
+          <motion.section className="mb-10 md:mb-16" variants={itemVariants}>
+             <h2 className="text-3xl font-semibold text-primary mb-8 text-center flex items-center justify-center">
+                 <BookOpenCheck className="w-8 h-8 mr-3 text-accent" />
+                 {furtherLearningTitle}
+             </h2>
+             <motion.div
+                className="max-w-3xl mx-auto bg-card p-6 rounded-lg shadow-md text-muted-foreground"
+                 variants={itemVariants} // Apply item variant for fade-in
+             >
+                <ul className="list-disc list-inside space-y-2">
+                    {furtherLearningListItems.map((item, index) => (
+                       <li key={`learn-${index}`}>{item.substring(2)}</li> // Remove '- ' prefix
+                    ))}
+                </ul>
+                 {/* Add the concluding remark if present */}
+                {furtherLearningParagraphs.length > 1 && !furtherLearningParagraphs[furtherLearningParagraphs.length - 1].startsWith('- ') && (
+                    <p className="mt-4 italic">{furtherLearningParagraphs[furtherLearningParagraphs.length - 1]}</p>
+                )}
+             </motion.div>
+          </motion.section>
 
 
         {/* Footer Section */}
