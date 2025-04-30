@@ -208,11 +208,11 @@ export const modules: Module[] = [
 
 export const resources: Resource[] = [
   {
-    title: "Python for Everybody (YouTube)",
-    description: "Excellent free course for Python beginners by Dr. Chuck.",
-    url: "https://www.youtube.com/playlist?list=PLlRFEj9H3Oj7Bp8-DfGpfOA9lZzd ভিক্ষু", // Example Playlist
-    type: "youtube",
-    icon: Youtube,
+    title: "Learn the Basics of Python in 1 hour",
+    description: "A concise tutorial covering Python fundamentals.",
+    url: "https://www.howtogeek.com/learn-the-basics-of-python-in-one-hour/",
+    type: "article", // Changed type to 'article'
+    icon: LinkIcon, // Keep LinkIcon or change if more appropriate
   },
   {
     title: "Pandas Documentation",
@@ -262,7 +262,8 @@ export const futureDashboards: DashboardLink[] = [
     // },
 ];
 
-// Add a new section for the full course overview text
+// This content is now primarily loaded from the PDF via the API.
+// Keep this here as a potential fallback or for testing if needed.
 export const courseOverviewContent: string = `
 **8-Week AI & Machine Learning Course: Beginner to Intermediate (Python Focus)**
 

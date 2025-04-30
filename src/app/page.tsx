@@ -2,7 +2,6 @@
 'use client'; // Required for Framer Motion and client-side interactions
 
 import React from 'react';
-import { Button } from "@/components/ui/button"; // Keep Button import if needed elsewhere, though cards have their own
 import { Separator } from "@/components/ui/separator";
 import { motion, AnimatePresence } from "framer-motion"; // Import motion and AnimatePresence
 import { CourseOverviewCard } from '@/components/course-overview-card';
@@ -11,7 +10,7 @@ import { ResourceCard } from '@/components/resource-card';
 import { DashboardLinkCard } from '@/components/dashboard-link-card';
 import { modules, resources, futureDashboards, furtherLearningResources } from '@/lib/course-data'; // Import furtherLearningResources
 import { BrainCircuit, BookOpenCheck } from 'lucide-react'; // Import BookOpenCheck icon
-
+import { Skeleton } from '@/components/ui/skeleton'; // Import Skeleton
 
 // Animation variants
 const containerVariants = {
@@ -39,17 +38,52 @@ const itemVariants = {
 
 export default function Home() {
   const [isClient, setIsClient] = React.useState(false);
+  const [courseContent, setCourseContent] = React.useState<string | null>(null);
+  const [isLoading, setIsLoading] = React.useState(true);
+  const [error, setError] = React.useState<string | null>(null);
 
   React.useEffect(() => {
     setIsClient(true); // Set client state after mount
+
+    // Fetch PDF content
+    const fetchPdfContent = async () => {
+      setIsLoading(true);
+      setError(null);
+      try {
+        // Assumes your PDF is named 'course-content.pdf' and is in the public/pdfs directory
+        const response = await fetch('/api/pdf?filename=course-content.pdf');
+        if (!response.ok) {
+          throw new Error(`Failed to fetch PDF: ${response.statusText}`);
+        }
+        const data = await response.json();
+        setCourseContent(data.text);
+      } catch (err: any) {
+        console.error("Error fetching PDF content:", err);
+        setError(err.message || 'Failed to load course content from PDF.');
+        // Fallback or alternative content could be set here if needed
+        setCourseContent(null); // Ensure no stale content is shown on error
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchPdfContent();
   }, []);
 
-  // Render nothing or a loader server-side, then the full UI client-side
-  if (!isClient) {
-    return null; // Or a loading spinner
+  // Render skeleton or loader server-side/during fetch, then the full UI client-side
+  if (!isClient || isLoading) {
+    return (
+      <div className="container mx-auto max-w-5xl p-4 md:p-8 space-y-10">
+         <Skeleton className="h-24 w-full" />
+         <Skeleton className="h-32 w-full" />
+         <Skeleton className="h-64 w-full" />
+         <Skeleton className="h-48 w-full" />
+         <Skeleton className="h-48 w-full" />
+      </div>
+    ); // Or a loading spinner
   }
 
-   // Parse furtherLearningResources
+   // Parse furtherLearningResources (assuming this still comes from lib/course-data)
    const furtherLearningParagraphs = furtherLearningResources.trim().split('\n\n');
    const furtherLearningTitle = furtherLearningParagraphs.length > 0 ? furtherLearningParagraphs[0].replace(/\*\*/g, '') : "Further Learning";
    const furtherLearningListItems = furtherLearningParagraphs.slice(1).join('\n').split('\n').filter(line => line.startsWith('- '));
@@ -68,7 +102,7 @@ export default function Home() {
         <motion.header className="text-center mb-10 md:mb-16" variants={itemVariants}>
            <BrainCircuit className="w-16 h-16 mx-auto mb-4 text-accent" />
           <h1 className="text-4xl md:text-5xl font-extrabold text-primary mb-3">
-              AI & Machine Learning Course
+              AI & Machine Learning Course for Maharathaneh Alborz
           </h1>
           <p className="text-lg text-muted-foreground">Beginner to Intermediate (Python Focus)</p>
           <p className="text-sm text-muted-foreground/80 mt-2">Powered by AI4All - Ario Shabani</p>
@@ -79,16 +113,24 @@ export default function Home() {
         </motion.div>
 
 
-        {/* Course Overview Section */}
+        {/* Course Overview Section - Now uses PDF content */}
         <motion.section className="mb-10 md:mb-16" variants={itemVariants}>
-          <CourseOverviewCard />
+            {error ? (
+                <div className="text-destructive-foreground bg-destructive p-4 rounded-md">
+                    Error loading course content: {error}
+                </div>
+            ) : (
+                // Pass the fetched PDF content to the overview card
+                // The Card component will handle displaying it
+                <CourseOverviewCard pdfContent={courseContent} />
+            )}
         </motion.section>
 
          <motion.div variants={itemVariants}>
           <Separator className="mb-10 md:mb-16 bg-border/60" />
         </motion.div>
 
-        {/* Weekly Modules Section */}
+        {/* Weekly Modules Section - Still uses course-data.ts */}
         <motion.section className="mb-10 md:mb-16" variants={itemVariants}>
           <h2 className="text-3xl font-semibold text-primary mb-8 text-center">Weekly Modules</h2>
           <motion.div
@@ -106,7 +148,7 @@ export default function Home() {
          </motion.div>
 
 
-        {/* Resources Section */}
+        {/* Resources Section - Still uses course-data.ts */}
         <motion.section className="mb-10 md:mb-16" variants={itemVariants}>
           <h2 className="text-3xl font-semibold text-primary mb-8 text-center">Useful Resources</h2>
           <motion.div
@@ -124,7 +166,7 @@ export default function Home() {
         </motion.div>
 
 
-        {/* Future Dashboards Section */}
+        {/* Future Dashboards Section - Still uses course-data.ts */}
          {futureDashboards.length > 0 && (
             <>
              <motion.section className="mb-10 md:mb-16" variants={itemVariants}>
@@ -144,7 +186,7 @@ export default function Home() {
             </>
          )}
 
-         {/* Further Learning Section */}
+         {/* Further Learning Section - Still uses course-data.ts */}
           <motion.section className="mb-10 md:mb-16" variants={itemVariants}>
              <h2 className="text-3xl font-semibold text-primary mb-8 text-center flex items-center justify-center">
                  <BookOpenCheck className="w-8 h-8 mr-3 text-accent" />
