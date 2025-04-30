@@ -2,9 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
+/* Remove the explicit font-family definition for body, rely on font variables */
+/* body {
   font-family: var(--font-geist-sans), sans-serif;
-}
+} */
 
 @layer base {
   :root {
@@ -85,7 +86,7 @@ body {
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans; /* Ensure font-sans is applied */
     /* Gradient is applied directly in layout.tsx for simplicity */
   }
 }

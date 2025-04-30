@@ -1,17 +1,20 @@
 import type { Metadata } from 'next';
-import { Geist_Sans as GeistSans, Geist_Mono as GeistMono } from 'next/font/google';
+// Correctly import Geist fonts from the 'geist' package
+import { GeistSans } from 'geist/font/sans';
+import { GeistMono } from 'geist/font/mono';
 import './globals.css';
 import { cn } from '@/lib/utils';
 import { Toaster } from '@/components/ui/toaster'; // Import Toaster
 
+// Initialize the font variables
 const geistSans = GeistSans({
   variable: '--font-geist-sans',
-  subsets: ['latin'],
+  subsets: ['latin'], // Add subsets if needed, though Geist often handles this automatically
 });
 
 const geistMono = GeistMono({
   variable: '--font-geist-mono',
-  subsets: ['latin'],
+  subsets: ['latin'], // Add subsets if needed
 });
 
 export const metadata: Metadata = {
@@ -29,8 +32,8 @@ export default function RootLayout({
       <body
         className={cn(
           'min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 font-sans antialiased dark:from-gray-900 dark:to-indigo-950', // Applied gradient here
-          geistSans.variable,
-          geistMono.variable
+          geistSans.variable, // Use the font variable class
+          geistMono.variable  // Use the font variable class
         )}
       >
         {children}
