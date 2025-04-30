@@ -37,10 +37,6 @@ const itemVariants = {
 };
 
 export default function Home() {
-  const [isClient, setIsClient] = React.useState(false);
-  const [courseContent, setCourseContent] = React.useState<string | null>(null);
-  const [isLoading, setIsLoading] = React.useState(true);
-  const [error, setError] = React.useState<string | null>(null);
 
   React.useEffect(() => {
     setIsClient(true); // Set client state after mount
@@ -84,20 +80,10 @@ export default function Home() {
     ); // Or a loading spinner
   }
 
-   // Parse furtherLearningResources (assuming this still comes from lib/course-data)
-   const furtherLearningParagraphs = furtherLearningResources.trim().split('\n\n');
-   const furtherLearningTitle = furtherLearningParagraphs.length > 0 ? furtherLearningParagraphs[0].replace(/\*\*/g, '') : "Further Learning";
-   const furtherLearningListItems = furtherLearningParagraphs.slice(1).join('\n').split('\n').filter(line => line.startsWith('- '));
-
-
   return (
     <AnimatePresence>
       <motion.div
         className="container mx-auto max-w-5xl p-4 md:p-8"
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
-        exit="hidden" // Define exit animation if needed
       >
         {/* Header Section */}
         <motion.header className="text-center mb-10 md:mb-16" variants={itemVariants}>
@@ -115,19 +101,8 @@ export default function Home() {
 
 
         {/* Course Overview Section - Now uses PDF content */}
-        <motion.section className="mb-10 md:mb-16" variants={itemVariants}>
-            {error ? (
-                <div className="text-destructive-foreground bg-destructive p-4 rounded-md shadow-md">
-                    <p className="font-semibold mb-2">Error Loading Course Content:</p>
-                    <p>{error}</p>
-                    <p className="mt-2 text-sm">Please ensure a file named <code className="bg-destructive/80 px-1 rounded">course-content.pdf</code> exists in the <code className="bg-destructive/80 px-1 rounded">public/pdfs/</code> directory of the project.</p>
-                </div>
-            ) : (
-                // Pass the fetched PDF content to the overview card
-                // The Card component will handle displaying it
-                <CourseOverviewCard pdfContent={courseContent} />
-            )}
-        </motion.section>
+        <CourseOverviewCard />
+
 
          <motion.div variants={itemVariants}>
           <Separator className="mb-10 md:mb-16 bg-border/60" />
@@ -140,7 +115,7 @@ export default function Home() {
              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
              variants={containerVariants} // Use container variants for staggering grid items
            >
-            {modules.map((module, index) => (
+            {modules.map((module) => (
               <ModuleCard key={module.week} module={module} index={index} />
             ))}
           </motion.div>
@@ -158,7 +133,7 @@ export default function Home() {
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
             variants={containerVariants}
           >
-            {resources.map((resource, index) => (
+            {resources.map((resource) => (
               <ResourceCard key={index} resource={resource} index={index} />
             ))}
           </motion.div>
@@ -178,7 +153,7 @@ export default function Home() {
                   className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 justify-center"
                    variants={containerVariants}
                >
-                 {futureDashboards.map((link, index) => (
+                 {futureDashboards.map((link) => (
                    <DashboardLinkCard key={index} dashboardLink={link} index={index} />
                  ))}
                </motion.div>
@@ -192,23 +167,13 @@ export default function Home() {
          {/* Further Learning Section - Still uses course-data.ts */}
           <motion.section className="mb-10 md:mb-16" variants={itemVariants}>
              <h2 className="text-3xl font-semibold text-primary mb-8 text-center flex items-center justify-center">
-                 <BookOpenCheck className="w-8 h-8 mr-3 text-accent" />
-                 {furtherLearningTitle}
+               <BookOpenCheck className="w-8 h-8 mr-3 text-accent" />
+                Further Learning
              </h2>
-             <motion.div
-                className="max-w-3xl mx-auto bg-card p-6 rounded-lg shadow-md text-muted-foreground"
-                 variants={itemVariants} // Apply item variant for fade-in
-             >
-                <ul className="list-disc list-inside space-y-2 prose prose-sm dark:prose-invert max-w-none">
-                    {furtherLearningListItems.map((item, index) => (
-                       <li key={`learn-${index}`}>{item.substring(2)}</li> // Remove '- ' prefix
-                    ))}
-                </ul>
-                 {/* Add the concluding remark if present */}
-                {furtherLearningParagraphs.length > 1 && !furtherLearningParagraphs[furtherLearningParagraphs.length - 1].startsWith('- ') && (
-                    <p className="mt-4 italic">{furtherLearningParagraphs[furtherLearningParagraphs.length - 1]}</p>
-                )}
-             </motion.div>
+
+            
+            
+            
           </motion.section>
 
 
@@ -218,6 +183,6 @@ export default function Home() {
         </motion.footer>
 
       </motion.div>
-     </AnimatePresence>
+    </AnimatePresence>
   );
 }
