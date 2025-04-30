@@ -1,4 +1,4 @@
-# Firebase Studio - AI & Machine Learning Course Dashboard
+# AI4All Training Hub - AI & Machine Learning Course Dashboard
 
 This is a Next.js application designed as a dashboard for an AI & Machine Learning course.
 
@@ -10,8 +10,8 @@ This is a Next.js application designed as a dashboard for an AI & Machine Learni
     ```
 
 2.  **Place Course Content PDF:**
-    - Rename your course content PDF file to `course-content.pdf`.
-    - Place this file inside the `public/pdfs/` directory. If the directory doesn't exist, create it.
+    - **Rename your course content PDF file to `course-content.pdf`.**
+    - **Place this `course-content.pdf` file inside the `public/pdfs/` directory.** If the `public/pdfs/` directory doesn't exist, create it first.
 
 3.  **Run the Development Server:**
     ```bash
@@ -39,4 +39,5 @@ This is a Next.js application designed as a dashboard for an AI & Machine Learni
 - `src/lib/`: Utility functions and data (like module/resource details).
 - `src/hooks/`: Custom React hooks.
 - `src/ai/`: Genkit related files (if used).
-- `public/pdfs/`: Location for the `course-content.pdf` file.
+- `public/pdfs/`: **Location for the `course-content.pdf` file.**
+

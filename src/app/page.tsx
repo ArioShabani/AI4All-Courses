@@ -53,7 +53,8 @@ export default function Home() {
         // Use the standardized filename 'course-content.pdf'
         const response = await fetch('/api/pdf?filename=course-content.pdf');
         if (!response.ok) {
-          throw new Error(`Failed to fetch PDF: ${response.statusText}`);
+          const errorData = await response.json().catch(() => ({ error: `HTTP error! status: ${response.status}` }));
+          throw new Error(errorData.error || `Failed to fetch PDF: ${response.statusText}`);
         }
         const data = await response.json();
         setCourseContent(data.text);
@@ -102,7 +103,7 @@ export default function Home() {
         <motion.header className="text-center mb-10 md:mb-16" variants={itemVariants}>
            <BrainCircuit className="w-16 h-16 mx-auto mb-4 text-accent" />
           <h1 className="text-4xl md:text-5xl font-extrabold text-primary mb-3">
-              AI & Machine Learning Course for Maharathaneh Alborz
+              AI & Machine Learning Course for MaharatKhaneh Alborz
           </h1>
           <p className="text-lg text-muted-foreground">Beginner to Intermediate (Python Focus)</p>
           <p className="text-sm text-muted-foreground/80 mt-2">Powered by AI4All - Ario Shabani</p>
@@ -116,8 +117,10 @@ export default function Home() {
         {/* Course Overview Section - Now uses PDF content */}
         <motion.section className="mb-10 md:mb-16" variants={itemVariants}>
             {error ? (
-                <div className="text-destructive-foreground bg-destructive p-4 rounded-md">
-                    Error loading course content: {error}
+                <div className="text-destructive-foreground bg-destructive p-4 rounded-md shadow-md">
+                    <p className="font-semibold mb-2">Error Loading Course Content:</p>
+                    <p>{error}</p>
+                    <p className="mt-2 text-sm">Please ensure a file named <code className="bg-destructive/80 px-1 rounded">course-content.pdf</code> exists in the <code className="bg-destructive/80 px-1 rounded">public/pdfs/</code> directory of the project.</p>
                 </div>
             ) : (
                 // Pass the fetched PDF content to the overview card
@@ -196,7 +199,7 @@ export default function Home() {
                 className="max-w-3xl mx-auto bg-card p-6 rounded-lg shadow-md text-muted-foreground"
                  variants={itemVariants} // Apply item variant for fade-in
              >
-                <ul className="list-disc list-inside space-y-2">
+                <ul className="list-disc list-inside space-y-2 prose prose-sm dark:prose-invert max-w-none">
                     {furtherLearningListItems.map((item, index) => (
                        <li key={`learn-${index}`}>{item.substring(2)}</li> // Remove '- ' prefix
                     ))}
