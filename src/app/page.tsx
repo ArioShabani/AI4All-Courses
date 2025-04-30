@@ -50,7 +50,7 @@ export default function Home() {
       setIsLoading(true);
       setError(null);
       try {
-        // Assumes your PDF is named 'course-content.pdf' and is in the public/pdfs directory
+        // Use the standardized filename 'course-content.pdf'
         const response = await fetch('/api/pdf?filename=course-content.pdf');
         if (!response.ok) {
           throw new Error(`Failed to fetch PDF: ${response.statusText}`);
@@ -59,7 +59,7 @@ export default function Home() {
         setCourseContent(data.text);
       } catch (err: any) {
         console.error("Error fetching PDF content:", err);
-        setError(err.message || 'Failed to load course content from PDF.');
+        setError(err.message || 'Failed to load course content from PDF. Please ensure the file named `course-content.pdf` exists in the `public/pdfs` directory.');
         // Fallback or alternative content could be set here if needed
         setCourseContent(null); // Ensure no stale content is shown on error
       } finally {

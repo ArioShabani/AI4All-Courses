@@ -35,6 +35,12 @@ export async function GET(request: NextRequest) {
      return NextResponse.json({ error: 'Invalid filename' }, { status: 400 });
   }
 
+  // Ensure the filename ends with .pdf
+  if (!filename.toLowerCase().endsWith('.pdf')) {
+      return NextResponse.json({ error: 'Filename must end with .pdf' }, { status: 400 });
+  }
+
+
   const pdfDirectory = path.join(process.cwd(), 'public', 'pdfs'); // Store PDFs in public/pdfs
   const filePath = path.join(pdfDirectory, filename);
 
@@ -55,7 +61,8 @@ export async function GET(request: NextRequest) {
   } catch (error: any) {
     console.error(`Error reading or parsing PDF file ${filePath}:`, error);
     if (error.code === 'ENOENT') {
-      return NextResponse.json({ error: `File not found: ${filename}` }, { status: 404 });
+      // Provide a more helpful error message to the user
+      return NextResponse.json({ error: `File not found: ${filename}. Please ensure the file exists in the 'public/pdfs' directory.` }, { status: 404 });
     }
     return NextResponse.json({ error: 'Failed to read or parse PDF file' }, { status: 500 });
   }

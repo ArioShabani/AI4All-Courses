@@ -262,24 +262,6 @@ export const futureDashboards: DashboardLink[] = [
     // },
 ];
 
-// This content is now primarily loaded from the PDF via the API.
-// Keep this here as a potential fallback or for testing if needed.
-export const courseOverviewContent: string = `
-**8-Week AI & Machine Learning Course: Beginner to Intermediate (Python Focus)**
-
-Welcome to the AI & Machine Learning course! This program is designed to take you from foundational concepts to practical Python-based implementations, preparing you for roles in this exciting field. Over the next 8 weeks, we will blend theory with hands-on projects, focusing on building practical skills using Python and its powerful libraries.
-
-**Target Audience:** Individuals with an engineering background and basic familiarity with AI, ML, and data engineering, aiming for employability, training contracts, SME integration projects, and VA roles.
-
-**Course Objectives:** By the end of this course, you will be able to:
-- Understand core AI/ML concepts and terminology.
-- Write Python code for data handling, analysis, and automation.
-- Implement basic machine learning algorithms.
-- Utilize frameworks and tools for building AI applications and workflows.
-- Prepare for roles in AI/ML, data engineering, and related fields.
-- Understand how to leverage AI for automation, including agentic workflows.
-`;
-
 // Add a new section for resources mentioned at the end of the course content
 export const furtherLearningResources: string = `
 **Course Resources & Further Learning**
