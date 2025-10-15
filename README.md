@@ -1,4 +1,4 @@
-# AI4All Training Hub - AI & Machine Learning Course Dashboard
+# AI4All Training Hub - AI Learning Course Dashboard
 
 This is a Next.js application designed as a dashboard for an AI & Machine Learning course.
 
